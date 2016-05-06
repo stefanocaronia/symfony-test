@@ -2,11 +2,19 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Home{% endblock %} | Gestione Prodotti</title>
         {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />		
+		<link rel="stylesheet" href="{{ asset('common/js/boostrap/css/bootstrap.min.css') }}">				
+		<link rel="stylesheet" href="{{ asset('common/css/style.css') }}">		
+		<script src="{{ asset('common/js/jquery-2.2.3.min.js') }}"></script>		
+		<script src="{{ asset('common/js/boostrap/js/bootstrap.min.js') }}"></script>	
+		<script src="{{ asset('common/js/main.js') }}"></script>	
+	</head>
     <body>
-        {% block body %}{% endblock %}
+		<div id="page">
+			<h1>{{block('title')}}</h1>
+			{% block body %}{% endblock %}
+		</div>
     </body>
 </html>

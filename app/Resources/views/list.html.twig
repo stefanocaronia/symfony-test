@@ -1,0 +1,42 @@
+{# app/Resources/views/list.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista prodotti{% endblock %}
+
+{% block body %}		
+	<div class="form-group">
+		<label class="control-label" for="filter-tags">Filtr tags</label>
+		<input id="filter-tags" name="filter-tags" placeholder="es. cani gatti salite">
+	</div>
+	<div class="panel panel-default">
+		<table class="table table-bordered">
+			<tr class="thead">
+				<th>#</th>
+				<th>Data creazione</th>
+				<th>Nome Prodotto</th>
+				<th>Descrizione Prodotto</th>
+				<th>Prezzo</th>
+				<th>Elenco Tag</th>
+			</tr>
+		{% for product in products %}
+			<tr class="line" data-tags="{{ product.tags|json_encode() }}" data-route="{{ path('product_edit', {'id': product.id} ) }}">
+				<td>{{ product.id}}</td>
+				<td>{{ product.created|date('d/m/Y H:i')}}</td>
+				<td>{{ product.name}}</td>
+				<td>{{ product.description}}</td>
+				<td>{{ product.price|number_format(2,'.')}} &euro;</td>
+				<td>
+					{% for tag in product.tags %}
+						<span class="label label-default">{{ tag }}</span>
+					{% endfor %}
+				</td>
+			</tr>
+		{% endfor %}	
+		</table>
+	</div>
+	<p class="filter-empty">Nessun prodotto corrispondente ai tag selezionati</p>
+	{% if products is empty %}
+		<p>Nessun prodotto presente in archivio</p>
+	{% endif %}
+	<a class="btn btn-default btn-lg" href="{{ path('product_create') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Aggiungi Prodotto</a>
+{% endblock %}

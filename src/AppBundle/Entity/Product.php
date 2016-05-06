@@ -46,10 +46,10 @@ class Product
     private $created;
 
     /**
-     * @var datetime $updated
-     * @ORM\Column(type="datetime", nullable = true)
+     * @var simple_array $tags
+     * @ORM\Column(type="simple_array", nullable = true)
      */
-    private $updated;
+    private $tags;
 	
     /**
      * Get id
@@ -203,5 +203,29 @@ class Product
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    /**
+     * Set tags
+     *
+     * @param array $tags
+     *
+     * @return Product
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }
