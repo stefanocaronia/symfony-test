@@ -2,6 +2,8 @@
     "name": "symfony/framework-standard-edition",
     "license": "MIT",
     "type": "project",
+	"minimum-stability": "dev",
+	"prefer-stable": true,
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
         "psr-4": { "": "src/" },
@@ -25,7 +27,7 @@
         "twbs/bootstrap": "^3.3"
     },
     "require-dev": {
-        "sensio/generator-bundle": "^3.0",
+		"sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0"
     },
     "scripts": {

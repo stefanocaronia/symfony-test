@@ -12,6 +12,7 @@
 		<table class="table table-bordered">
 			<tr class="thead">
 				<th>#</th>
+				<th>Foto Prodotto</th>
 				<th>Data creazione</th>
 				<th>Nome Prodotto</th>
 				<th>Descrizione Prodotto</th>
@@ -21,6 +22,7 @@
 		{% for product in products %}
 			<tr class="line" data-tags="{{ product.tags|json_encode() }}" data-route="{{ path('product_edit', {'id': product.id} ) }}">
 				<td>{{ product.id}}</td>
+				<td><img class="thumb-prodotto" src="{{ product.getWebImagePath() }}"></td>
 				<td>{{ product.created|date('d/m/Y H:i')}}</td>
 				<td>{{ product.name}}</td>
 				<td>{{ product.description}}</td>

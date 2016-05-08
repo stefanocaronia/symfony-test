@@ -27,12 +27,13 @@ class ProductController extends Controller
 		$form->handleRequest($request);
 		
 		if ($form->isSubmitted() && $form->isValid()) {
-			$em = $this->getDoctrine()->getManager();
+			$db = $this->getDoctrine()->getManager();
 			$TAGS = explode(",",$product->getTags());
-			array_walk($TAGS,"trim");
-			$product->setTags($TAGS);
-			$em->persist($product);
-			$em->flush();
+			$TAGS = array_map("trim",$TAGS);
+			$product->setTags($TAGS);			
+			$product->uploadImage();			
+			$db->persist($product);
+			$db->flush();
 
 			return $this->redirect($this->generateUrl('product_list'));
 		}
@@ -54,6 +55,7 @@ class ProductController extends Controller
 		$product = $repository->findOneBy(["id"=>$id]);
 		$TAGS = implode(", ",$product->getTags());
 		$product->setTags($TAGS);
+		$oldimage = $product->impath;
 		
 		$form = $this->createForm(ProductType::class, $product);
 		
@@ -62,19 +64,20 @@ class ProductController extends Controller
 		$form->handleRequest($request);
 		
 		if ($form->isSubmitted() && $form->isValid()) {
-			$em = $this->getDoctrine()->getManager();
+			$db = $this->getDoctrine()->getManager();
 			$TAGS = explode(",",$product->getTags());
-			array_walk($TAGS,"trim");
+			$TAGS = array_map("trim",$TAGS);
 			$product->setTags($TAGS);
-			$em->persist($product);
-			$em->flush();
-
+			$product->uploadImage();
+			$db->persist($product);
+			$db->flush();
 			return $this->redirect($this->generateUrl('product_list'));
 		}
 
         return $this->render('edit.html.twig', array(
             'form' => $form->createView(),			
-            'product' => $product
+            'product' => $product,
+			'oldimage' => $oldimage			
         ));		
     }
 	
@@ -89,9 +92,11 @@ class ProductController extends Controller
 		$repository = $this->getDoctrine()->getRepository('AppBundle:Product');
 		$product = $repository->findOneBy(["id"=>$id]);
 		
-		$em = $this->getDoctrine()->getManager();
-		$em->remove($product);
-		$em->flush();
+		$db = $this->getDoctrine()->getManager();
+		if (is_file($product->getAbsoluteImagePath()))
+			unlink($product->getAbsoluteImagePath());
+		$db->remove($product);
+		$db->flush();
 		
 		$products = $repository->findBy([],['created' => 'ASC']);
 		

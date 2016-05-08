@@ -4,6 +4,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity
@@ -32,12 +34,6 @@ class Product
      * @ORM\Column(type="text", nullable = true)
      */
     private $description;
-   
-   /**
-     * @ORM\Column(type="text", nullable = true)
-     */
-    private $image;
-	
 	
 	/**
      * @var datetime $created
@@ -51,6 +47,68 @@ class Product
      */
     private $tags;
 	
+	/**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    public $impath;
+	
+	/**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $imfile;
+
+	/**
+     * Sets imfile.
+     *
+     * @param UploadedFile $file
+     */
+    public function setImfile(UploadedFile $file = null)
+    {
+        $this->imfile = $file;
+    }
+	
+	/**
+     * Get imfile.
+     *
+     * @return UploadedFile
+     */
+    public function getImfile()
+    {
+        return $this->imfile;
+    }
+	
+	public function uploadImage()
+	{
+		if (null === $this->getImfile()) {
+			return;
+		}		
+		$this->getImfile()->move(
+			$this->getUploadRootDir(),
+			$this->getImfile()->getClientOriginalName()
+		);
+		
+		if ($this->impath!=$this->getImfile()->getClientOriginalName() && is_file($this->getAbsoluteImagePath()))
+			unlink($this->getAbsoluteImagePath());
+		$this->impath = $this->getImfile()->getClientOriginalName();		
+		$this->imfile = null;
+	}	
+	
+	public function getAbsoluteImagePath() {
+        return null === $this->impath? null : $this->getUploadRootDir().'/'.$this->impath;
+    }
+
+    public function getWebImagePath() {
+        return null === $this->impath? null : $this->getUploadDir().'/'.$this->impath;
+    }
+
+    protected function getUploadRootDir() {
+        return $GLOBALS["kernel"]->getWebRoot().$this->getUploadDir();
+    }
+
+    protected function getUploadDir() {
+        return '/files/images';
+    }	
+
     /**
      * Get id
      *
@@ -133,13 +191,12 @@ class Product
         return $this->description;
     }
 
-    /**
-     * Set image
-     *
-     * @param string $image
-     *
-     * @return Product
-     */
+	/**
+	 * Set image
+	 *
+	 * @param AppBundle\Entity\Image $image
+	 * @return Product
+	 */
     public function setImage($image)
     {
         $this->image = $image;
@@ -150,7 +207,7 @@ class Product
     /**
      * Get image
      *
-     * @return string
+     * @return AppBundle\Entity\Image
      */
     public function getImage()
     {
@@ -179,30 +236,6 @@ class Product
     public function getCreated()
     {
         return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return Product
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
     }
 
     /**

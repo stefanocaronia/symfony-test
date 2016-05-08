@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class ProductType extends AbstractType
 {
@@ -22,24 +23,27 @@ class ProductType extends AbstractType
         $builder
             ->add('name', TextType::class, array(
 				"label" => "Nome prodotto",
+				"required" => true,
 				"attr" => array("placeholder"=>"Macchinina")
 			))
             ->add('price', MoneyType::class, array(
 				"label" => "Prezzo",
-				"attr" => array("placeholder"=>"10.20")
+				"required" => true,
+				"attr" => array("placeholder"=>"40.00")
 			))
             ->add('description', TextType::class, array(
 				"label" => "Descrizione prodotto",
 				"attr" => array("placeholder"=>"L'oggetto è come nuovo ma non è nuovo.")
 			))
-           // ->add('image', TextType::class)
-           // ->add('created', DateType::class)
+            ->add('imfile',  FileType::class, array(
+				"label" => "Foto del prodotto",
+				"required"=>false
+			))
             ->add('tags', TextType::class, array(
-				"label" => "Elenco Tag",
+				"label" => "Elenco Tag (valori separati da virgola)",
 				"required" => true,
 				"attr" => array("placeholder"=>"fragole, acciaieria, peloponneso")
 			))
-			
         ;
     }
     

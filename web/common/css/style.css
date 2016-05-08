@@ -27,3 +27,4 @@ p {margin-bottom:20px;}
 
 tr.line {cursor:pointer;}
 tr.line:hover {background-color:#FAFAFA;}
+img.thumb-prodotto {width:100px;height:100px;object-fit: cover;}
