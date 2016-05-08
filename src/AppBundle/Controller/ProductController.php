@@ -10,6 +10,15 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use AppBundle\Entity\Product;
 
 class ProductController extends Controller {
+	
+	/**
+     * @Route("/", name="homepage")
+     */
+    public function indexAction()
+    {
+		return $this->redirectToRoute('product_list');
+    }
+	
     /**
      * @Route("/product/create", name="product_create")
      */

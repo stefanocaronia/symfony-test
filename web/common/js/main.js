@@ -7,27 +7,27 @@ $(function(){
 	});
 	
 	function checkTags(input){
-		var tagstring=input.val();
-		var found=false;
-		if (tagstring) {		
+		var tagstring=(typeof input!="undefined"?input.val():"");
+		var gfound=false;
+		if (tagstring!="") {		
 			var tags=tagstring.split(" ");			
 			$("tr.line").each(function(){
 				var tr=$(this);
 				var ptags=$(this).data("tags");
-				found=false;
+				var found=false;
 				$.each(ptags, function(i,pt){
 					$.each(tags, function(ti, ta){
 						if (pt.indexOf(ta) > -1) {
-							found=true;
-							return;
+							found=gfound=true;
+							return !found;
 						}
 					});
-					if (found) return;
+					return !found;
 				});
 				if (!found) $(this).addClass("hidden");
 				else $(this).removeClass("hidden");				
 			});	
-			if (!found) $(".filter-empty").show();
+			if (!gfound) $(".filter-empty").show();
 			else $(".filter-empty").hide();
 		} else {
 			$("tr.line").removeClass("hidden");

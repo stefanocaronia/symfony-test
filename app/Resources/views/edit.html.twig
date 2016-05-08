@@ -6,6 +6,7 @@
 {% block title %}Modifica prodotto{% endblock %}
 
 {% block body %}	
+	{% if product.impath is not empty %}<img class="thumb-prodotto-form" src="{{ product.getWebImagePath() }}"><br><br>{% endif %}
     {{ form_start(form, {'attr': {'role': 'form'}}) }}
 	{{ form_widget(form) }}
 	{{ form_end(form) }}		

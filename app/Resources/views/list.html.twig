@@ -3,11 +3,14 @@
 
 {% block title %}Lista prodotti{% endblock %}
 
-{% block body %}		
-	<div class="form-group">
-		<label class="control-label" for="filter-tags">Filtr tags</label>
-		<input id="filter-tags" name="filter-tags" placeholder="es. cani gatti salite">
+{% block body %}	
+	
+	{% if products is not empty %}		
+	<div class="filters" role="search">
+		<label>Filtra tag</label>
+		<input type="text" class="form-control" id="filter-tags" name="filter-tags" placeholder="es. cani coccinelle slitte">	  
 	</div>
+	{% endif %}
 	<div class="panel panel-default">
 		<table class="table table-bordered">
 			<tr class="thead">
@@ -22,7 +25,7 @@
 		{% for product in products %}
 			<tr class="line" data-tags="{{ product.tags|json_encode() }}" data-route="{{ path('product_edit', {'id': product.id} ) }}">
 				<td>{{ product.id}}</td>
-				<td><img class="thumb-prodotto" src="{{ product.getWebImagePath() }}"></td>
+				<td>{% if product.impath is not empty %}<img class="thumb-prodotto" src="{{ product.getWebImagePath() }}">{% endif %}</td>
 				<td>{{ product.created|date('d/m/Y H:i')}}</td>
 				<td>{{ product.name}}</td>
 				<td>{{ product.description}}</td>
@@ -33,12 +36,14 @@
 					{% endfor %}
 				</td>
 			</tr>
-		{% endfor %}	
+		{% endfor %}
+	<tr class="filter-empty"><td colspan="7">Nessun prodotto corrispondente ai tag selezionati</td></tr>
+	{% if products is empty %}
+		<tr><td colspan="7">Nessun prodotto presente in archivio</td></tr>
+	{% endif %}
+
+		
 		</table>
 	</div>
-	<p class="filter-empty">Nessun prodotto corrispondente ai tag selezionati</p>
-	{% if products is empty %}
-		<p>Nessun prodotto presente in archivio</p>
-	{% endif %}
 	<a class="btn btn-default btn-lg" href="{{ path('product_create') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Aggiungi Prodotto</a>
 {% endblock %}
