@@ -62,8 +62,7 @@ class Product
      *
      * @param UploadedFile $file
      */
-    public function setImfile(UploadedFile $file = null)
-    {
+    public function setImfile(UploadedFile $file = null) {
         $this->imfile = $file;
     }
 	
@@ -77,11 +76,10 @@ class Product
         return $this->imfile;
     }
 	
-	public function uploadImage()
-	{
-		if (null === $this->getImfile()) {
+	public function uploadImage() {
+		if (null === $this->getImfile()) 
 			return;
-		}		
+
 		$this->getImfile()->move(
 			$this->getUploadRootDir(),
 			$this->getImfile()->getClientOriginalName()
@@ -89,6 +87,7 @@ class Product
 		
 		if ($this->impath!=$this->getImfile()->getClientOriginalName() && is_file($this->getAbsoluteImagePath()))
 			unlink($this->getAbsoluteImagePath());
+		
 		$this->impath = $this->getImfile()->getClientOriginalName();		
 		$this->imfile = null;
 	}	
@@ -114,8 +113,7 @@ class Product
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -126,8 +124,7 @@ class Product
      *
      * @return Product
      */
-    public function setName($name)
-    {
+    public function setName($name)  {
         $this->name = $name;
 
         return $this;
@@ -138,8 +135,7 @@ class Product
      *
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -150,10 +146,8 @@ class Product
      *
      * @return Product
      */
-    public function setPrice($price)
-    {
+    public function setPrice($price)  {
         $this->price = $price;
-
         return $this;
     }
 
@@ -162,8 +156,7 @@ class Product
      *
      * @return string
      */
-    public function getPrice()
-    {
+    public function getPrice() {
         return $this->price;
     }
 
@@ -174,8 +167,7 @@ class Product
      *
      * @return Product
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
 
         return $this;
@@ -186,8 +178,7 @@ class Product
      *
      * @return string
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -197,8 +188,7 @@ class Product
 	 * @param AppBundle\Entity\Image $image
 	 * @return Product
 	 */
-    public function setImage($image)
-    {
+    public function setImage($image) {
         $this->image = $image;
 
         return $this;
@@ -209,8 +199,7 @@ class Product
      *
      * @return AppBundle\Entity\Image
      */
-    public function getImage()
-    {
+    public function getImage() {
         return $this->image;
     }
 
@@ -221,10 +210,8 @@ class Product
      *
      * @return Product
      */
-    public function setCreated($created)
-    {
+    public function setCreated($created) {
         $this->created = $created;
-
         return $this;
     }
 
@@ -233,8 +220,7 @@ class Product
      *
      * @return \DateTime
      */
-    public function getCreated()
-    {
+    public function getCreated() {
         return $this->created;
     }
 
@@ -245,10 +231,8 @@ class Product
      *
      * @return Product
      */
-    public function setTags($tags)
-    {
+    public function setTags($tags) {
         $this->tags = $tags;
-
         return $this;
     }
 
@@ -257,8 +241,7 @@ class Product
      *
      * @return array
      */
-    public function getTags()
-    {
+    public function getTags() {
         return $this->tags;
     }
 }
