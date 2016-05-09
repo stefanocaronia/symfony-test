@@ -34,7 +34,7 @@ class Product
      * @ORM\Column(type="text", nullable = true)
      */
     private $description;
-	
+
 	/**
      * @var datetime $created
      * @ORM\Column(type="datetime")
@@ -46,67 +46,104 @@ class Product
      * @ORM\Column(type="simple_array", nullable = true)
      */
     private $tags;
-	
+
 	/**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public $impath;
-	
+    private $imageFileName;
+
 	/**
      * @Assert\File(maxSize="6000000")
      */
-    private $imfile;
+    private $imageFile;
 
 	/**
-     * Sets imfile.
+     * Sets imageFile.
      *
      * @param UploadedFile $file
      */
-    public function setImfile(UploadedFile $file = null) {
-        $this->imfile = $file;
+    public function setImageFile(UploadedFile $file = null) {
+        $this->imageFile = $file;
     }
-	
+
 	/**
-     * Get imfile.
+     * Get imageFile.
      *
      * @return UploadedFile
      */
-    public function getImfile()
+    public function getImageFile()
     {
-        return $this->imfile;
+        return $this->imageFile;
     }
-	
-	public function uploadImage() {
-		if (null === $this->getImfile()) 
-			return;
 
-		$this->getImfile()->move(
+	/**
+     * Handle image upload
+     *
+     * @return bool
+     */
+	public function uploadImage()
+	{
+		if (null === $this->getImageFile()) {
+			return false;
+		}
+
+		// sposto il file temporaneo nella cartella di upload
+		$this->getImageFile()->move(
 			$this->getUploadRootDir(),
-			$this->getImfile()->getClientOriginalName()
+			$this->getImageFile()->getClientOriginalName()
 		);
-		
-		if ($this->impath!=$this->getImfile()->getClientOriginalName() && is_file($this->getAbsoluteImagePath()))
+
+		// se il nome dell'immagine è cambiato elimino la vecchia immagine
+		if ($this->getImageFileName() !== $this->getImageFile()->getClientOriginalName() && is_file($this->getAbsoluteImagePath())) {
 			unlink($this->getAbsoluteImagePath());
-		
-		$this->impath = $this->getImfile()->getClientOriginalName();		
-		$this->imfile = null;
-	}	
-	
-	public function getAbsoluteImagePath() {
-        return null === $this->impath? null : $this->getUploadRootDir().'/'.$this->impath;
+		}
+
+		// aggiorno il nome del file per il database e svuoto l'oggetto file
+		$this->setImageFileName($this->getImageFile()->getClientOriginalName());
+		$this->setImageFile(null);
+
+		return is_file($this->getAbsoluteImagePath());
+	}
+
+	/**
+     * Get absolute image Path
+     *
+     * @return string | null
+     */
+	public function getAbsoluteImagePath()
+	{
+        return (null === $this->getImageFileName() ? null : $this->getUploadRootDir().'/'.$this->getImageFileName());
     }
 
-    public function getWebImagePath() {
-        return null === $this->impath? null : $this->getUploadDir().'/'.$this->impath;
+	/**
+     * Get web image Path
+     *
+     * @return string | null
+     */
+    public function getWebImagePath()
+	{
+        return (null === $this->getImageFileName() ? null : $this->getUploadDir().'/'.$this->getImageFileName());
     }
 
-    protected function getUploadRootDir() {
+	/**
+     * Get Upload root dir
+     *
+     * @return string
+     */
+    protected function getUploadRootDir()
+	{
         return $GLOBALS["kernel"]->getWebRoot().$this->getUploadDir();
     }
 
-    protected function getUploadDir() {
+	/**
+     * Get upload dir for images (relative to web folder)
+     *
+     * @return string
+     */
+    protected function getUploadDir()
+	{
         return '/files/images';
-    }	
+    }
 
     /**
      * Get id
@@ -146,8 +183,10 @@ class Product
      *
      * @return Product
      */
-    public function setPrice($price)  {
+    public function setPrice($price)
+	{
         $this->price = $price;
+
         return $this;
     }
 
@@ -156,7 +195,8 @@ class Product
      *
      * @return string
      */
-    public function getPrice() {
+    public function getPrice()
+	{
         return $this->price;
     }
 
@@ -167,7 +207,8 @@ class Product
      *
      * @return Product
      */
-    public function setDescription($description) {
+    public function setDescription($description)
+	{
         $this->description = $description;
 
         return $this;
@@ -178,29 +219,31 @@ class Product
      *
      * @return string
      */
-    public function getDescription() {
+    public function getDescription()
+	{
         return $this->description;
     }
 
 	/**
-	 * Set image
+	 * Set imageFileName
 	 *
-	 * @param AppBundle\Entity\Image $image
 	 * @return Product
 	 */
-    public function setImage($image) {
-        $this->image = $image;
+    public function setImageFileName($image)
+	{
+        $this->imageFileName = $image;
 
         return $this;
     }
 
     /**
-     * Get image
+     * Get imageFileName
      *
      * @return AppBundle\Entity\Image
      */
-    public function getImage() {
-        return $this->image;
+    public function getImageFileName()
+	{
+        return $this->imageFileName;
     }
 
     /**
@@ -210,9 +253,11 @@ class Product
      *
      * @return Product
      */
-    public function setCreated($created) {
+    public function setCreated($created)
+	{
         $this->created = $created;
-        return $this;
+
+		return $this;
     }
 
     /**
@@ -220,8 +265,9 @@ class Product
      *
      * @return \DateTime
      */
-    public function getCreated() {
-        return $this->created;
+    public function getCreated()
+	{
+		return $this->created;
     }
 
     /**
@@ -231,8 +277,10 @@ class Product
      *
      * @return Product
      */
-    public function setTags($tags) {
+    public function setTags($tags)
+	{
         $this->tags = $tags;
+
         return $this;
     }
 
@@ -241,7 +289,8 @@ class Product
      *
      * @return array
      */
-    public function getTags() {
+    public function getTags()
+	{
         return $this->tags;
     }
 }

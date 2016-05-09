@@ -5,10 +5,12 @@
 
 {% block title %}Aggiungi prodotto{% endblock %}
 
-{% block body %}	
+{% block body %}
+
     {{ form_start(form, {'attr': {'role': 'form'}}) }}
 	{{ form_widget(form) }}
-	{{ form_end(form) }}	
-	
+	{{ form_end(form) }}
+
 	<a class="btn btn-default btn-lg" href="{{ path('product_list') }}"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;&nbsp;Vai alla lista</a>
+
 {% endblock %}
