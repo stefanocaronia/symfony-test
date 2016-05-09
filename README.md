@@ -25,14 +25,27 @@ Per realizzare il progetto ho utilizzato:
 	
 ## Installazione
 
-Effettuare il checkout e poi eseguire
+Clonare questo repository (oppure scaricare e scompattare lo zip):
+
+```
+git clone https://github.com/irprocess/PHPTest.git
+cd PHPTest/
+```
+
+Installare i pacchetti con composer:
 
 ```
 composer update
 ```
 
-per aggiornare i pacchetti
-	
+Eseguire il server:
+
+```
+php bin/console server:run
+```
+
+Andare su <http://localhost:8000> per testare il sito.
+
 ## Struttura file
 
 - app/Resources/views
